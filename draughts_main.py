@@ -5,7 +5,7 @@ Description: A graphical implementation of english draughts(www.wikipedia.org/en
 
 
 
-import pygame, time
+import pygame, pygame_textinput, time
 board = [
         ['0','r','0','r','0','r','0','r',],
         ['r','0','r','0','r','0','r','0',],
@@ -48,9 +48,10 @@ class counter:
 
 def piece_move(start, end):
     # do these need switching
+    if board[start[0]][start[1]].colour == '0':
+        return
     board[end[0]][end[1]] = board[start[0]][start[1]]
     board[end[0]][end[1]].value = end
-    board[end[0]][end[1]].colour = board[start[0]][start[1]].colour
     board[start[0]][start[1]] = counter('0',start,'p')
     
 def board_assemble():
@@ -123,7 +124,6 @@ print(possible_mover_finder('r'))
 #board_draw(board)
 while True:
     board_draw(board)
-    if(count == 1):
-        piece_move([2,1], [3,0])
+    piece_move([2,1], [3,0])
     count += 1
     time.sleep(1/100000)

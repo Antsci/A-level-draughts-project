@@ -47,9 +47,8 @@ class counter:
         return {(value[0],value[1]):possible_moves}
 
 def piece_move(start, end):
-    # do these need switching
     if board[start[0]][start[1]].colour == '0':
-        return
+        return 
     board[end[0]][end[1]] = board[start[0]][start[1]]
     board[end[0]][end[1]].value = end
     board[start[0]][start[1]] = counter('0',start,'p')

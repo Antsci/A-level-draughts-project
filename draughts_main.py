@@ -5,7 +5,7 @@ Description: A graphical implementation of english draughts(www.wikipedia.org/en
 
 
 
-import pygame, pygame_textinput, time
+import pygame, time
 board = [
         ['0','r','0','r','0','r','0','r',],
         ['r','0','r','0','r','0','r','0',],
@@ -39,9 +39,7 @@ class counter:
             for j in i:
                 if ((int(j)>7) or (int(j)<0)):
                     possible_moves.remove(i)
-        for i in possible_moves:
-            if board[i[0]][i[1]].colour == colour:
-                removal_moves.append(i)
+        removal_moves = [i for i in possible_moves if board[i[0]][i[1]].colour == colour]
         for i in removal_moves:
             possible_moves.remove(i)
         return {(value[0],value[1]):possible_moves}
@@ -85,19 +83,10 @@ def board_draw(board):
 
                                          
 def possible_mover_finder(side):
-    all_possible_moves = []                                       
-    for y in board:
-        for x in y:
-           if x.colour == side:
-              all_possible_moves.append(x.possible_moves())
-              
-    removal_moves = []
-    for i in all_possible_moves:
-        if [] in i.values():
-            removal_moves.append(i)
+    all_possible_moves = [x.possible_moves() for y in board for x in y if x.colour == side ]
+    removal_moves = [i for i in all_possible_moves if [] in i.values()]          
     for i in removal_moves:
             all_possible_moves.remove(i)
-
     return all_possible_moves
 
 

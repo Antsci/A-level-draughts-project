@@ -5,7 +5,7 @@ Description: A graphical implementation of english draughts(www.wikipedia.org/en
 
 
 
-import pygame, pygame_textinput, time
+import pygame, time
 board = [
         ['0','r','0','r','0','r','0','r',],
         ['r','0','r','0','r','0','r','0',],
@@ -70,7 +70,7 @@ def board_draw(board):
             if x.colour == 'r':
                 pygame.draw.circle(screen,(255,0,0),((x.value[1]* 90) + 45,(x.value[0]* 90)+45),45,0)
             if x.colour == 'w':
-                pygame.draw.circle(screen,(255,255,255),((x.value[1]* 90)+45,(x.value[0]* 90)+45),45,0)
+                pygame.draw.circle(screen,(0,0,255),((x.value[1]* 90)+45,(x.value[0]* 90)+45),45,0)
     pygame.display.flip()
 
     dead=False
@@ -91,11 +91,16 @@ def possible_mover_finder(side):
 
 
     
-##def move_evaluator(move, colour):
-##    end_pos = board[move[0]][move[1]]
-##    score = 0
-##    if endpos.colour != '0':
-##       if 
+def move_evaluator(start, end, colour):
+    end_pos = board[end[0]][end[1]]
+    score = 0
+    direction = [end[0]-start[0],end[1]-start[1]]
+    print (direction)
+    if end_pos.colour != '0':
+      if direction[1] == -1:
+          if end_pos.value():
+              pass
+          
 
 
 #def move_ranker(moves):
@@ -109,9 +114,10 @@ def game_init(side):
 count = 0
 board_assemble()
 print(possible_mover_finder('r'))
-#board_draw(board)
+board_draw(board)
 while True:
     board_draw(board)
     piece_move([2,1], [3,0])
     count += 1
     time.sleep(1/100000)
+    move_evaluator((2,1),[3, 2],'w')

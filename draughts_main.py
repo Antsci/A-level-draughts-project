@@ -44,7 +44,7 @@ class counter:
             possible_moves.remove(i)
         return {(value[0],value[1]):possible_moves}
 
-def piece_move(start, end):
+def simple_piece_move(start, end):
     if board[start[0]][start[1]].colour == '0':
         return 
     board[end[0]][end[1]] = board[start[0]][start[1]]
@@ -65,12 +65,16 @@ def board_draw(board):
     pygame.display.set_caption("Draughts")
     background_image = pygame.image.load("draughts_board.gif").convert()
     screen.blit(background_image, [0, 0])
+    font = pygame.font.Font(pygame.font.get_default_font(), 12)
     for y in board:
-        for x in y:
+        for x in y:  
+            loc = ((x.value[1]* 90) + 45,(x.value[0]* 90)+45)
             if x.colour == 'r':
-                pygame.draw.circle(screen,(255,0,0),((x.value[1]* 90) + 45,(x.value[0]* 90)+45),45,0)
+                pygame.draw.circle(screen,(255,0,0),loc,45,0)
             if x.colour == 'w':
-                pygame.draw.circle(screen,(0,0,255),((x.value[1]* 90)+45,(x.value[0]* 90)+45),45,0)
+                pygame.draw.circle(screen,(0,0,255),loc,45,0)
+            text_surface = font.render(str(x.value),True,(0, 255, 0))
+            screen.blit(text_surface, loc)
     pygame.display.flip()
 
     dead=False
@@ -89,17 +93,19 @@ def possible_mover_finder(side):
             all_possible_moves.remove(i)
     return all_possible_moves
 
-
-    
+def piece_taker_checker(end_pos, colour):
+    #recursive search for potential moves
+    if end_pos.colour != '0':
+      if direction[1] == -1:
+          if end_pos.value():
+              pass
+            
 def move_evaluator(start, end, colour):
     end_pos = board[end[0]][end[1]]
     score = 0
     direction = [end[0]-start[0],end[1]-start[1]]
     print (direction)
-    if end_pos.colour != '0':
-      if direction[1] == -1:
-          if end_pos.value():
-              pass
+    piece_taker_checker(position, colour)
           
 
 
@@ -114,10 +120,9 @@ def game_init(side):
 count = 0
 board_assemble()
 print(possible_mover_finder('r'))
-board_draw(board)
 while True:
     board_draw(board)
-    piece_move([2,1], [3,0])
+    pygame.quit()
+    simple_piece_move([2,3], [3,2])
     count += 1
-    time.sleep(1/100000)
-    move_evaluator((2,1),[3, 2],'w')
+    #move_evaluator((2,1),[3, 2],'w')

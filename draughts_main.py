@@ -71,10 +71,12 @@ def board_draw(board):
             loc = ((x.value[1]* 90) + 45,(x.value[0]* 90)+45)
             if x.colour == 'r':
                 pygame.draw.circle(screen,(255,0,0),loc,45,0)
+                text_surface = font.render(str(x.value),True,(0, 255, 0))
+                screen.blit(text_surface, loc)
             if x.colour == 'w':
                 pygame.draw.circle(screen,(0,0,255),loc,45,0)
-            text_surface = font.render(str(x.value),True,(0, 255, 0))
-            screen.blit(text_surface, loc)
+                text_surface = font.render(str(x.value),True,(0, 255, 0))
+                screen.blit(text_surface, loc)
     pygame.display.flip()
 
     dead=False

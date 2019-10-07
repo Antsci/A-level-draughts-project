@@ -89,26 +89,30 @@ def board_draw(board):
 
                                          
 def possible_mover_finder(side):
-    all_possible_moves = [x.possible_moves() for y in board for x in y if x.colour == side ]
+    all_possible_moves = [x.possible_moves() for y in board for x in y if x.colour == side]
     removal_moves = [i for i in all_possible_moves if [] in i.values()]          
     for i in removal_moves:
             all_possible_moves.remove(i)
     return all_possible_moves
 
-def piece_taker_checker(end_pos, colour):
+def piece_taker_checker(end_pos, colour, direction):
     #recursive search for potential moves
     if end_pos.colour != '0':
-      if direction[1] == -1:
-          if end_pos.value():
-              pass
-            
+          if board[end_pos.value[0] + direction[0], end_pos.value[1] + direction[1]].colour == '0' :
+             #legal take
+    return pieces_taken
+
+
+
 def move_evaluator(start, end, colour):
     end_pos = board[end[0]][end[1]]
     score = 0
     direction = [end[0]-start[0],end[1]-start[1]]
     print (direction)
-    piece_taker_checker(position, colour)
-          
+    score += piece_taker_checker(position, colour, direction)
+
+    
+    return [start, end, score]
 
 
 #def move_ranker(moves):

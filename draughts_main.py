@@ -95,17 +95,6 @@ def possible_mover_finder(side):
             all_possible_moves.remove(i)
     return all_possible_moves
 
-def take_in_direction(end_pos, direction):
-    final = board[end_pos.value[0] + direction[0], end_pos.value[1] + direction[1]]
-    pieces_taken =[0,[],final]
-    #check if any pieces can be taken from this position, in this direction
-    if final.colour == '0' :
-        pieces_taken[0] += 1
-        pieces_taken[1].append(end_pos.value)
-    else:
-        return 0
-    return pieces_taken
-
 
 
 def move_evaluator(start, end, colour):
@@ -114,8 +103,23 @@ def move_evaluator(start, end, colour):
     direction = [end[0]-start[0],end[1]-start[1]]
     print (direction)
     taken = take_in_direction(end_pos, direction)
-    
+    score = taken
+    if colour == 'r' and end[0] == 7 and end_pos.colour == '0':
+        score[0] += 4
+    if colour == 'w' and end[0] == 0 and end_pos.colour == '0':
+        score[0] += 4
+    return score
 
+def take_in_direction(end_pos, direction):
+    final = board[end_pos.value[0] + direction[0]][ end_pos.value[1] + direction[1]]
+    pieces_taken =[0,[],final]
+    #check if any pieces can be taken from this position, in this direction
+    if final.colour == '0' and end_pos.colour != '0':
+        pieces_taken[0] += 1
+        pieces_taken[1] = end_pos.value
+    else:
+        return 0
+    return pieces_taken
 
 def sorter(moves):
     #merge sort
@@ -127,7 +131,7 @@ def sorter(moves):
         sorter(right_half)
         i,j,k = 0,0,0
         while (i < len(left_half)) and (j < len(right_half)):
-            if left_half[i] < right_half[j]:
+            if left_half[i][0] < right_half[j][0]:
                 moves[k] = left_half[i]
                 i += 1
             else:
@@ -152,7 +156,13 @@ def game_init(side):
     #call the move funcs on each other
     moves = possible_mover_finder(side)
     #loop through moves calling move_eval on each
+    scores = []
+    for i in moves:
+        for x in i:
+            for y in i[x]:
+                scores.append(move_evaluator(x,y,side))
     #sort list made with sorter and return highest scoring move
+    scores = sorter(scores)
     
     
     
@@ -160,9 +170,23 @@ def game_init(side):
 count = 0
 board_assemble()
 print(possible_mover_finder('r'))
-##while True:
-##    board_draw(board)
-##    pygame.quit()
-##    simple_piece_move([2,3], [3,2])
-##    count += 1
-##    #move_evaluator((2,1),[3, 2],'w')
+moves = possible_mover_finder('r')
+#loop through moves calling move_eval on each
+scores = []
+for i in moves:
+    for x in i:
+        for y in i[x]:
+            print(x,y)
+            scores.append(move_evaluator(x,y,'r'))
+#sort list made with sorter and return highest scoring move
+
+print(scores)
+scores = sorter([[5,0,0],[6,0,0],[4,0,0],[3,0,0]])
+print(scores)
+while True:
+    board_draw(board)
+    pygame.quit()
+    simple_piece_move([2,3], [3,2])
+    simple_piece_move([3,2], [4,3])
+    count += 1
+    #move_evaluator((2,1),[3, 2],'w')
